@@ -1,6 +1,4 @@
-const { times } = require('lodash');
 const mongoose = require('mongoose');
-const { required } = require('yargs');
 
 const pollSchema = mongoose.Schema(
     {
@@ -11,24 +9,24 @@ const pollSchema = mongoose.Schema(
         },
         description: {
             type: String,
-            required: false,
+            required: [true, 'Pls add a description'],
         },
         options: [
             {
                 text: {
                     type: String,
-                    required: true
+                    required: true,
                 },
                 votes: {
                     type: Number,
-                    default: 0
-                }
-            }
+                    default: 0,
+                },
+            },
         ],
         creator: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
-            ref: 'User'
+            ref: 'User',
         },
         endDate: {
             type: Date,
@@ -36,18 +34,18 @@ const pollSchema = mongoose.Schema(
         },
         isActive: {
             type: Boolean,
-            default: true
+            default: true,
         },
         voters: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            }
-        ]
+                ref: 'User',
+            },
+        ],
     },
     {
         timestamps: true,
     }
 );
 
-module.exports = mongoose.model('Poll', pollSchema);
+module.exports = mongoose.model('Poll', pollSchema); 
