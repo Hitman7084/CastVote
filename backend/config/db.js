@@ -6,12 +6,13 @@ const connectDB = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
+        
         console.log(`Thank god: ${conn.connection.host}`);
-    }
+    } 
     catch (error) {
-        console.error(`messed up: ${error.message}`);
+        console.error(`Messed up: ${error.message}`);
         process.exit(1);
     }
 };
 
-module.exports = connectDB;
+module.exports = connectDB; 

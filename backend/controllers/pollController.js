@@ -1,8 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Poll = require('../models/pollModel');
-const { option } = require('yargs');
-const { text } = require('body-parser');
-const { error } = require('console');
+const User = require('../models/userModel');
 
 // To get all poolls with public access
 // GET
@@ -18,7 +16,7 @@ const createPoll = asyncHandler(async (req, res) => {
 
     if (!title || !description || !options || !endDate) {
         res.status(400);
-        throw new Error('Please provide all required fields');
+        throw new Error('Pls provide all required fields');
     }
 
     const poll = await Poll.create({
@@ -35,7 +33,7 @@ const createPoll = asyncHandler(async (req, res) => {
 // to get single poll
 // GET
 const getPoll = asyncHandler(async(req, res) => {
-    const Poll = await Poll.findById(req.params.id).populate('creator', 'name');
+    const poll = await Poll.findById(req.params.id).populate('creator', 'name');
 
     if (!poll) {
         res.status(400);
@@ -48,7 +46,7 @@ const getPoll = asyncHandler(async(req, res) => {
 //to update polls
 // PUT
 const updatePoll = asyncHandler(async(req, res) => {
-    const Poll = await Poll.findById(req.params.id);
+    const poll = await Poll.findById(req.params.id);
 
     if (!poll) {
         res.status(400);
@@ -71,7 +69,7 @@ const updatePoll = asyncHandler(async(req, res) => {
 // Delete Poll
 // DELETE
 const deletePoll = asyncHandler(async (req, res) => {
-    const Poll = await Poll.findByID(req.params.id);
+    const poll = await Poll.findById(req.params.id);
 
     if (!poll) {
         res.status(404);
@@ -92,14 +90,14 @@ const deletePoll = asyncHandler(async (req, res) => {
 // POST
 const castVote = asyncHandler(async(req, res) => {
     const { optionIndex } = req.body;
-    const poll = await Poll.findByID(req.params.id);
+    const poll = await Poll.findById(req.params.id);
 
     if (!poll) {
         res.status(404);
         throw new Error('Poll not found');
     }
     
-    if (!poll.isActive || newDate() > new Date(poll.endDate)) {
+    if (!poll.isActive || new Date() > new Date(poll.endDate)) {
         res.status(400);
         throw new Error('Poll is no longer active');
     }
@@ -117,7 +115,7 @@ const castVote = asyncHandler(async(req, res) => {
     poll.options[optionIndex].votes += 1;
     poll.voters.push(req.user.id);
 
-    await UserActivation.findByIdAndUpdate(req.user.id, {
+    await User.findByIdAndUpdate(req.user.id, {
         $push: { votedPolls: poll._id }
     })
 
