@@ -66,7 +66,7 @@ const Register: React.FC = () => {
             Create Your Account
           </Heading>
           <Text textAlign="center" color={useColorModeValue('gray.600', 'gray.400')}>
-            Join CastVote to make your voice heard
+            Welcome to CastVote
           </Text>
 
           <form onSubmit={handleSubmit}>
