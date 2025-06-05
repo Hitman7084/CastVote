@@ -48,5 +48,6 @@ function App() {
     </ChakraProvider>
   );
 }
+axios.get(`${process.env.REACT_APP_API_URL}/api/polls`);
 
 export default App; 
